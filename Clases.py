@@ -1,4 +1,5 @@
 import IOFunctions
+
 class Group:
     nombre = ''
     def __init__(self, nombre):
