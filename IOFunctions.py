@@ -1,4 +1,5 @@
 import re
+from colorama import Fore
 
 def readAON(path):
     texto=''
@@ -199,3 +200,22 @@ def readAON(path):
         indice+=1
     
     return listadoF
+
+#===============================#
+#FUNCION PARA ESCRIBIR CON COLOR#
+#===============================#
+def imprimir(color):
+    if color == 'PINK':
+        print(Fore.MAGENTA)
+    elif color == 'BLUE':
+        print(Fore.BLUE)
+    elif color == 'RED':
+        print(Fore.RED)
+    elif color == 'GREEN':
+        print(Fore.GREEN)
+    elif color == 'YELLOW':
+        print(Fore.YELLOW)
+    elif color == 'ORANGE':
+        print(Fore.LIGHTRED_EX)
+    else:
+        print(Fore.RESET)

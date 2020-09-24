@@ -12,4 +12,5 @@ class Group:
     def addInformation(self, path):
         #self.data.append(IOFunctions.readAON(path))
         for i in IOFunctions.readAON(path):
+            print(i)
             self.data.append(i)

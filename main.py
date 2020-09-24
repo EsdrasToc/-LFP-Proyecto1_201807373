@@ -10,6 +10,16 @@ firstInstruction = ''
 
 ##### AQUI SE GUARDAN LOS TOKENS #####
 tk_id = []
+tk_palabras = []
+tk_menor = []
+tk_mayor = []
+tk_coma = []
+tk_texto = []
+tk_numero = []
+tk_booleano = []
+tk_igual = []
+tk_negacion = []
+tk_asterisco = []
 
 #CICLO PARA LECTURA DE INSTRUCCIONES#
 while cicle == True:
@@ -51,7 +61,18 @@ while cicle == True:
                 print('=== USTED ESTA UTILIZANDO EL SET '+ currentGroup.nombre +' ===')
         else:
             print('=== SE HA PRODUCIDO UN ERROR ===')
+    elif re.match('(L|l)(O|o)(A|a)(D|d)', firstInstruction) != None:
+
+        try:
+            automatas.Load(groups, tk_id, instruction)
+        except:
+            print('=== OCURRIO UN ERROR AL CARGAR LOS DATOS ===')
     
+    elif re.match('(S|s)(E|e)(L|l)(E|e)(C|c)(T|t)', firstInstruction) != None:
+
+        tk_palabras.append('SELECT')
+        automatas.Select(groups, instruction, tk_id, tk_palabras, tk_menor, tk_mayor, tk_coma, tk_texto, tk_numero, tk_booleano, tk_igual, tk_negacion, tk_asterisco)
+
     elif re.match('(E|e)(X|x)(I|i)(T|t)', firstInstruction):
         cicle = False
     else:
