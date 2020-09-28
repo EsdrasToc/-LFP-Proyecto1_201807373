@@ -14,3 +14,6 @@ class Group:
         for i in IOFunctions.readAON(path):
             print(i)
             self.data.append(i)
+
+#class Token:
+ #   tk = ''

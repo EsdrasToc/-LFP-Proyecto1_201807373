@@ -204,18 +204,105 @@ def readAON(path):
 #===============================#
 #FUNCION PARA ESCRIBIR CON COLOR#
 #===============================#
-def imprimir(color):
-    if color == 'PINK':
+def Color(color):
+    if  re.match('(P|p)(I|i)(N|n)(K|k)', color) != None:
         print(Fore.MAGENTA)
-    elif color == 'BLUE':
+        return 'PINK'
+    elif re.match('(B|b)(L|l)(U|u)(E|e)', color) != None:
         print(Fore.BLUE)
-    elif color == 'RED':
+        return 'BLUE'
+    elif re.match('(R|r)(E|e)(D|d)', color) != None:
         print(Fore.RED)
-    elif color == 'GREEN':
+        return 'RED'
+    elif re.match('(G|g)(R|r)(E|e)(E|e)(N|n)', color) != None:
         print(Fore.GREEN)
-    elif color == 'YELLOW':
+        return 'GREEN'
+    elif re.match('(Y|y)(E|e)(L|l)(L|l)(O|o)(W|w)', color) != None:
         print(Fore.YELLOW)
-    elif color == 'ORANGE':
+        return 'YELLOW'
+    elif re.match('(O|o)(R|r)(A|a)(N|n)(G|g)(E|e)', color) != None:
         print(Fore.LIGHTRED_EX)
+        return 'ORANGE'
     else:
-        print(Fore.RESET)
+        return None
+
+#===========================================#
+#FUNCION PARA ESCRIBIR REGISTROS SOLICITADOS#
+#===========================================#
+def Select(verAtributos, atributo, comparador, contenido, operador, currentGroup):
+
+    #return currentGroup.data
+    data = []
+    data2 = []
+
+    if comparador == None:
+        print(verAtributos)
+        if verAtributos != None:
+            data = seleccionarAtributos(currentGroup.data, verAtributos)
+            return data
+        else:
+            return currentGroup.data
+    else:
+        if re.match('(O|o)(R|r)', operador) != None:
+            for i in currentGroup.data:
+                if Comparar(i, atributo[0], comparador[0], contenido[0]) or Comparar(i, atributo[1], comparador[1], contenido[1]):
+                    data.append(i)
+        elif re.match('(A|a)(N|n)(D|d)', operador) != None:
+            for i in currentGroup.data:
+                if Comparar(i, atributo[0], comparador[0], contenido[0]) and Comparar(i, atributo[1], comparador[1], contenido[1]):
+                    data.append(i)
+        elif re.match('(X|x)(O|o)(R|r)', operador) != None:
+            for i in currentGroup.data:
+                if xor(Comparar(i, atributo[0], comparador[0], contenido[0]),Comparar(i, atributo[1], comparador[1], contenido[1])):
+                    data.append(i)
+        else:
+            for i in currentGroup.data:
+                if Comparar(i, atributo[0], comparador[0], contenido[0]):
+                    data.append(i)
+
+
+        if verAtributos != None:
+            data2 = seleccionarAtributos(data, verAtributos)
+            return data2
+        else:
+            return data
+
+
+def seleccionarAtributos(initialData, verAtributos):
+    data = []
+    for i in initialData:
+        dataObject = {}
+        for j  in verAtributos:
+            dataObject.update(i[j])
+        data.append(dataObject)
+        dataObject = None
+    
+    return data
+
+def xor(bool1, bool2):
+    if (not bool1 and bool2) or (bool1 and not bool2):
+        return True
+    else:
+        return False
+
+def Comparar(registro ,atributo, comparador, contenido):
+    if comparador == "=":
+        if registro[atributo] == contenido:
+            return True
+    elif comparador == "<=":
+        if registro[atributo] <= contenido:
+            return True
+    elif comparador == ">=":
+        if registro[atributo] >= contenido:
+            return True
+    elif comparador == "!=":
+        if registro[atributo] != contenido:
+            return True
+    elif comparador == "<":
+        if registro[atributo] < contenido:
+            return True
+    elif comparador == ">":
+        if registro[atributo] > contenido:
+            return True
+    
+    return False

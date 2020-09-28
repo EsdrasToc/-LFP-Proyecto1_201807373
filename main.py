@@ -1,79 +1,119 @@
 import Clases
 import re
 import automatas
+import IOFunctions
 
 currentGroup = None
 groups = []
 cicle = True
-instruction = ''
-firstInstruction = ''
+initialInstruction = ''
+instruction = []
 
-##### AQUI SE GUARDAN LOS TOKENS #####
-tk_id = []
-tk_palabras = []
-tk_menor = []
-tk_mayor = []
-tk_coma = []
-tk_texto = []
-tk_numero = []
-tk_booleano = []
-tk_igual = []
-tk_negacion = []
-tk_asterisco = []
+tokens = []
 
-#CICLO PARA LECTURA DE INSTRUCCIONES#
-while cicle == True:
-    instruction = input('$')
-    instruction = instruction.lstrip()
-    i = 0
-    firstInstruction = ''
-    spaceCondition = True
-    
-    while i < len(instruction):
-        if re.match('[a-z]|[A-Z]', instruction[i]) != None:
-            firstInstruction = firstInstruction + instruction[i]
-            spaceCondition = False
-        elif re.match('[a-z]|[A-Z]', instruction[i]) == None and spaceCondition == False:
-            break
-        i = i+1
-    
-    instruction = instruction.replace(firstInstruction, '')
-    if re.match('(C|c)(R|r)(E|e)(A|a)(T|t)(E|e)', firstInstruction):
-        reply = automatas.Create_Use(instruction)
-        if reply != None:
-            groups.append(Clases.Group(reply))
-            tk_id.append(reply)
-        else:
-            print('=== SE HA PRODUCIDO UN ERROR ===')
-    elif re.match('(U|u)(S|s)(E|e)', firstInstruction) != None:
-        reply = automatas.Create_Use(instruction)
-        if reply != None:
-            find = False
-            tk_id.append(reply)
-            for i in groups:
-                if i.nombre == reply:
-                    currentGroup = i
-                    find = True
-                    break
-            if find == False:
-                print('=== NO SE ENCONTRO UN SET CON ESTE NOMBRE ===')
+def setCurrentGroup(group):
+    currentGroup = group
+
+#Ejecucion de instrucciondes#
+def decision():
+    if re.match('(C|c)(R|r)(E|e)(A|a)(T|t)(E|e)', instruction[0]) != None:
+        for i in instruction:
+            if automatas.verificacionReservada(i):
+                continue
             else:
-                print('=== USTED ESTA UTILIZANDO EL SET '+ currentGroup.nombre +' ===')
-        else:
-            print('=== SE HA PRODUCIDO UN ERROR ===')
-    elif re.match('(L|l)(O|o)(A|a)(D|d)', firstInstruction) != None:
+                groups.append(Clases.Group(i))
+    elif re.match('(L|l)(O|o)(A|a)(D|d)', instruction[0]) != None:
+        set_id = ''
+        boolean = False
+        
+        for i in instruction:
+            if automatas.verificacionReservada(i):
+                continue
+            else:
+                if boolean:
+                    for j in groups:
+                        print(j.nombre)
+                        if j.nombre == set_id:
+                            j.addInformation(i)
+                else:
+                    set_id = i
+                    boolean = True
+    elif re.match('(U|u)(S|s)(E|e)', instruction[0])!= None:
+        for i in instruction:
+            if automatas.verificacionReservada(i):
+                continue
+            else:
+                for j in groups:
+                    if j.nombre == i:
+                        return j
+                        print(currentGroup)
+                        break
+    elif re.match('(P|p)(R|r)(I|i)(N|n)(T|t)', instruction[0]) != None:
+        for i in instruction:
+            if automatas.verificacionReservada(i):
+                continue
+            else:
+                IOFunctions.Color(i)
+    elif re.match('(S|s)(E|e)(L|l)(E|e)(C|c)(T|t)', instruction[0])!= None:
+        boolean1 = False
+        boolean2 = False
+        verAtributos = []
+        atributos = None #nombre de "columna"
+        comparador = None # <, >...
+        contenido = None # string, bool, float
+        operador = '' #or and
+        for i in instruction:
+            print(str(type(i)))
 
-        try:
-            automatas.Load(groups, tk_id, instruction)
-        except:
-            print('=== OCURRIO UN ERROR AL CARGAR LOS DATOS ===')
+            
+            if str(i).upper() == "WHERE":
+                atributos = []
+                comparador = []
+                contenido = []
+                boolean1 = True
+                continue
+
+            if re.match('!|<|>|=', str(i)) != None:
+                boolean2 = True
+                comparador.append(i)
+                continue
+
+            if re.match('((O|o)(R|r))|((A|a)(N|n)(D|d))', str(i)) != None:
+                operador = i
+                continue
+
+            if str(i) == "*":
+                verAtributos = None
+                print('entro aca')
+                continue
+
+            if automatas.verificacionReservada(i) == False:
+                if boolean1 == False:
+                    verAtributos.append(i)
+                else:
+                    if boolean2 == False:
+                        atributos.append(i)
+                    else:
+                        contenido.append(i)
+                        boolean2 = False
+            
+        for i in IOFunctions.Select(verAtributos, atributos, comparador, contenido, operador, currentGroup):
+            print(i)
+
+    elif re.match('(R|r)(E|e)(P|p)(O|o)(R|r)(T|t)', instruction[0]) != None:
+        pass
+    return None
+
+while cicle == True:
+
+    initialInstruction = input('$')
     
-    elif re.match('(S|s)(E|e)(L|l)(E|e)(C|c)(T|t)', firstInstruction) != None:
-
-        tk_palabras.append('SELECT')
-        automatas.Select(groups, instruction, tk_id, tk_palabras, tk_menor, tk_mayor, tk_coma, tk_texto, tk_numero, tk_booleano, tk_igual, tk_negacion, tk_asterisco)
-
-    elif re.match('(E|e)(X|x)(I|i)(T|t)', firstInstruction):
+    if re.match('(E|e)(X|x)(I|i)(T|t)', initialInstruction):
         cicle = False
-    else:
-        print('=== LA INSTRUCCION NO ES VALIDA ===')
+        continue
+
+    instruction = automatas.readInstruction(initialInstruction, tokens)
+
+    if decision() != None:
+        currentGroup = decision()
+        print(currentGroup.nombre)
