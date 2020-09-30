@@ -26,3 +26,5 @@ class General:
 
     def setCicle(self, cicle):
         self.cicle = cicle
+
+        

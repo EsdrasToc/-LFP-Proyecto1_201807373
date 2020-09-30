@@ -220,11 +220,9 @@ def readInstruction(instruction, tokens):
     estado = 0
     i = 0
     text = ''
-    #tokens = []
     instructionBlocs = []
     
     while i < len(instruction):
-        #print(estado)
         if estado == 0:
             if instruction[i] == '*':
                 tokens.append({'tk_asterisco' : '*'})
