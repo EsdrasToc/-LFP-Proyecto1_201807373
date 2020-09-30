@@ -12,8 +12,17 @@ class Group:
     def addInformation(self, path):
         #self.data.append(IOFunctions.readAON(path))
         for i in IOFunctions.readAON(path):
-            print(i)
             self.data.append(i)
 
-#class Token:
- #   tk = ''
+class General:
+    def __init__(self):
+        self.currentGroup = None
+        self.groups = []
+        self.tokens = []
+        self.cicle = True
+    
+    def setCurrentGroup(self, group):
+        self.currentGroup = group
+
+    def setCicle(self, cicle):
+        self.cicle = cicle
