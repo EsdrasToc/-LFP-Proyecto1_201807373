@@ -1,4 +1,5 @@
 import IOFunctions
+import automatas
 
 class Group:
     nombre = ''
@@ -10,8 +11,7 @@ class Group:
         self.nombre = nombre
     
     def addInformation(self, path):
-        #self.data.append(IOFunctions.readAON(path))
-        for i in IOFunctions.readAON(path):
+        for i in automatas.readAON(path):
             self.data.append(i)
 
 class General:

@@ -1,7 +1,7 @@
 import re
 from colorama import Fore
 
-def readAON(path):
+"""def readAON(path):
     texto=''
     with open(path, "r") as f:
         for line in f:
@@ -199,7 +199,7 @@ def readAON(path):
 
         indice+=1
     
-    return listadoF
+    return listadoF"""
 
 #===============================#
 #FUNCION PARA ESCRIBIR CON COLOR#

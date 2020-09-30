@@ -1,5 +1,6 @@
 import Clases
 import RI
+import automatas
 
 general = Clases.General()
 initialInstruction = ''
