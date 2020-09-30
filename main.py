@@ -1,7 +1,4 @@
 import Clases
-import re
-import automatas
-import IOFunctions
 import RI
 
 general = Clases.General()

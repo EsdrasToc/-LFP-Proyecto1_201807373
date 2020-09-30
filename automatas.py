@@ -20,6 +20,7 @@ def readInstruction(instruction, tokens):
     instructionBlocs = []
     
     while i < len(instruction):
+        #print(estado)
         if estado == 0:
             if instruction[i] == '*':
                 tokens.append({'tk_asterisco' : '*'})
@@ -48,6 +49,9 @@ def readInstruction(instruction, tokens):
                 else:
                     tokens.append({'tk_identificador' : text})
                     instructionBlocs.append(text)
+                
+                if instruction[i] == ',':
+                    tokens.append({'tk_coma' : ','})
                 text = ''
         elif estado == 2:
             if re.match('=|<|>|!', instruction[i]) != None:
@@ -133,6 +137,3 @@ def verificacionReservada(text):
         if i == str(text).upper():
             return True
     return False
-
-
-
