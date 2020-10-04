@@ -15,7 +15,7 @@ con su funcion y su forma de uso.
 
 Ahora si, comencemos!
 
-================================= Creacion de Sets =================================
+================================ Creacion de Sets =================================
 
 SimpleQL CLI te ofrece la opcion de crear distintos sets para poder manejar tu in-
 formacion de una manera mas eficiente y ordenada. ¿Que es un set? Imagina una carpeta
@@ -33,7 +33,7 @@ Ejemplo:
 con numeros, solo con un guion bajo o con letras. El resto del nombre puede llevar
 numeros, guiones bajos o letras.
 
-=============================== Carga de informacion ===============================
+============================== Carga de informacion ===============================
 
 Para poder utilizar tu informacion, primero tendras que cargarla dentro del programa.
 Para ello utilizaremos el comando LOAD INTO seguido de el nombre del set en el que
@@ -48,7 +48,7 @@ Ejemplo:
 Cabe resaltar que no es necesario cargar archivo por archivo, podemos ingresar
 muchos archivos de golpe.
 
-================================= Seleccion de Sets ================================
+================================ Seleccion de Sets ================================
 
 Para este momento ya hemos creado nuestros sets y cargado informacion dentro de 
 ellos. Ademas, para los proximos 7 comandos, es un pre-requisito seleccionar un set.
@@ -64,7 +64,7 @@ Ejemplo:
 Tienes que tener en cuenta que el nombre debe ser identico a como fue guardado en
 su creacion.
 
-================================= Consulta de datos ================================
+================================ Consulta de datos ================================
 
 Podemos hacer distintos tipos de consultas con distintas condiciones, esto a travez
 del comando SELECT.
@@ -159,7 +159,7 @@ Ejemplo:
 
     SELECT _atributo1, _atributo2 WHERE REGEX [^(ab)|..a]
 
-================================= Listar atributos =================================
+================================ Listar atributos =================================
 
 Luego de seleccionar un set, podemos ver cuales son los attributos almacenados den-
 tro de este set. Esto lo haremos con el comando LIST.
@@ -168,7 +168,7 @@ Ejemplo:
 
     LIST ATTRIBUTES
 
-============================== Buscar el valor maximo ==============================
+============================= Buscar el valor maximo ==============================
 
 Si deseamos buscar el valor maximo en un atributo podemos utilizar el comando MAX
 seguido de el atributo que deseamos evaluar. En los valores booleanos el valor True
@@ -179,7 +179,7 @@ Ejemplo:
 
     MAX _atributo
 
-============================== Buscar el valor minimo ==============================
+============================= Buscar el valor minimo ==============================
 
 Si deseamos buscar el valor minimo en un atributo podemos utilizar el comando MIN
 seguido de el atributo que deseamos evaluar. En los valores booleanos el valor True
@@ -190,7 +190,7 @@ Ejemplo:
 
     MIN _atributo
 
-============================== Sumatoria de atributos ==============================
+============================= Sumatoria de atributos ==============================
 
 Podemos realizar sumatorias de los valores de ciertos atributos, es necesario que
 tengamos en cuenta que esta opcion solamente sera funcional con atributos que alma-
@@ -202,7 +202,7 @@ Ejemplo:
 
     SUM _atributo1, _atributo2
 
-============================ Conteo basado en atributos ============================
+=========================== Conteo basado en atributos ============================
 
 Si deseamos verificar cuantas veces aparece un atributo dentro de un set, podemos
 utilizar el comando COUNT, este permite el uso de asterisco *
@@ -213,7 +213,7 @@ Ejemplo:
 
     COUNT _atributo1, _atributo2
 
-=========================== Reporte de consultas en HTML ===========================
+========================== Reporte de consultas en HTML ===========================
 
 Con la finalidad de que usted pueda guardar las consultas que necesite, SimpleQL CLI
 le proporciona un comando que le permitira observar la informacion obtenida basandose
@@ -227,7 +227,7 @@ Ejemplo:
 
     REPORT TO archivo.html COUNT *
 
-============================ Cambio de color en consola ============================
+=========================== Cambio de color en consola ============================
 
 Si usted desea que el texto que aparece en pantalla cambie de color, puede utilizar
 el comando PRINT IN seguido de alguno de los siguientes colores...
@@ -243,7 +243,7 @@ Ejemplo:
 
     PRINT IN ORANGE
 
-============================= Reporte de tokens en HTML ============================
+============================ Reporte de tokens en HTML ============================
 
 El programa puede reportar los tokens encontrados dentro de cada instruccion ingre-
 sada en el programa. El reporte se guardara con el nombre de REPORTE_TOKENS.html
@@ -252,7 +252,7 @@ Ejemplo:
 
     REPORT TOKENS
 
-========================= Ingreso de instrucciones externas ========================
+======================== Ingreso de instrucciones externas ========================
 
 Para evitar ingresar solamente una instruccion a la vez, podemos ingresar muchas por
 medio de el comando SCRIPT, seguido de la direccion de un archivo con extension
@@ -264,7 +264,7 @@ Ejemplo:
 
     SCRIPT instrucciones1.siql, instrucciones2.siql
 
-=================================== Archivos .AON ==================================
+================================== Archivos .AON ==================================
 
 Los archivos en donde esté guardada la informacion deben tener la extensio .aon
 y cumplir con la notacion del mismo.
@@ -299,7 +299,7 @@ Ejemplo:
         >
     )
 
-================================== Archivos .SIQL ==================================
+================================= Archivos .SIQL ==================================
 
 Para el comando SCRIPT los archivos que carguemos deben tener la extension .siql,
 es muy sencillo de utilizar, simplemente escribimos las instrucciones en orden de
