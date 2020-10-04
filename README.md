@@ -264,7 +264,7 @@ Ejemplo:
 
     SCRIPT instrucciones1.siql, instrucciones2.siql
 
-================================== Archivos .AON ==================================
+================================== Archivos .AON =================================
 
 Los archivos en donde esté guardada la informacion deben tener la extensio .aon
 y cumplir con la notacion del mismo.
@@ -299,7 +299,7 @@ Ejemplo:
         >
     )
 
-================================= Archivos .SIQL ==================================
+================================= Archivos .SIQL =================================
 
 Para el comando SCRIPT los archivos que carguemos deben tener la extension .siql,
 es muy sencillo de utilizar, simplemente escribimos las instrucciones en orden de
