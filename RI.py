@@ -3,7 +3,10 @@ import automatas
 import Clases
 import IOFunctions
 
-#Ejecucion de instrucciondes#
+#==========================#
+#EJECUCION DE INSTRUCCIONES#
+#==========================#
+
 def decision(instruction, general):
     if instruction[0].upper() == "CREATE":
         for i in instruction:
@@ -15,17 +18,20 @@ def decision(instruction, general):
         set_id = ''
         boolean = False
         
-        for i in instruction:
-            if automatas.verificacionReservada(i):
-                continue
-            else:
-                if boolean:
-                    for j in general.groups:
-                        if j.nombre == set_id:
-                            j.addInformation(i)
+        try:
+            for i in instruction:
+                if automatas.verificacionReservada(i):
+                    continue
                 else:
-                    set_id = i
-                    boolean = True
+                    if boolean:
+                        for j in general.groups:
+                            if j.nombre == set_id:
+                                j.addInformation(i)
+                    else:
+                        set_id = i
+                        boolean = True
+        except:
+            print('OCURRIO UN ERROR')
     elif instruction[0].upper() == "USE":
         for i in instruction:
             if automatas.verificacionReservada(i):
@@ -47,46 +53,59 @@ def decision(instruction, general):
 
     elif instruction[0].upper() == "LIST":
         auxDict = {}
-        for i in general.currentGroup.data:
-            auxDict.update(i)
+        try:
+            for i in general.currentGroup.data:
+                auxDict.update(i)
         
-        j = 1
-        for i in auxDict:
-            print(str(j) + ". " + i)
-            j += 1
+            j = 1
+            for i in auxDict:
+                print(str(j) + ". " + i)
+                j += 1
+        except:
+            print('NO SE HA SELECCIONADO UN SET PARA UTILIZAR')
     elif instruction[0].upper() == "SCRIPT":
         boolean = False
         instruccion = ''
-        instructionList = []
         
         for i in instruction:
             texto = ''
             instrucciones = None
             instrucciones = []
             if i.upper() != "SCRIPT":
-                with open(i, "r") as f:
-                    for line in f:
-                        texto = texto + line.replace('\n', "")
-                    j = 0
-                    while j < len(texto):
-                        instruccion = instruccion + texto[j]
-                        if texto[j] == ";" or j == len(texto)-1:
-                            instrucciones.append(instruccion.replace(';', ""))
-                            instruccion = ''
-                        j += 1
-                
-                for j in instrucciones:
-                    print("$" + j)
-                    decision(automatas.readInstruction(j, general.tokens), general)
-                    general.tokens.append({'tk_puntoComa' : ';'})
-                general.tokens.pop()
-                        
+                try:
+                    with open(i, "r") as f:
+                        for line in f:
+                            texto = texto + line.replace('\n', "")
+                        j = 0
+                        while j < len(texto):
+                            instruccion = instruccion + texto[j]
+                            if texto[j] == ";" or j == len(texto)-1:
+                                instrucciones.append(instruccion.replace(';', ""))
+                                instruccion = ''
+                            j += 1
+                    
+                    for j in instrucciones:
+                        print("$" + j)
+                        try:
+                            decision(automatas.readInstruction(j, general.tokens), general)
+                        except:
+                            print('NO SE PUDO EJECUTAR LA INSTRUCCION')
+                        general.tokens.append({'tk_puntoComa' : ';'})
+                    general.tokens.pop()
+                except:
+                    print('NO SE HA PODIDO LEER EL SCRIPT --- '+i+' ---')        
     elif instruction[0].upper() == 'EXIT':
+        print('#==========================#')
+        print('#====== HASTA PRONTO ======#')
+        print('#==========================#')
         general.setCicle(False)
 
     elif instruction[0].upper() == 'REPORT':
         if instruction[1].upper() == 'TOKENS':
-            IOFunctions.reportTokens(general.tokens)
+            try:
+                IOFunctions.reportTokens(general.tokens)
+            except:
+                print('NO PUDO REPORTAR LOS TOKENS')
         else:
             nombre = ""
             auxiliar_instruction = []
@@ -101,36 +120,52 @@ def decision(instruction, general):
                         auxiliar_instruction.append(i)
             
             if auxiliar_instruction[0].upper() == 'SELECT':
-                IOFunctions.reportHTMLWSelect(Select(auxiliar_instruction, general), nombre)
+                try:
+                    IOFunctions.reportHTMLWSelect(Select(auxiliar_instruction, general), nombre)
+                except:
+                    print('HA OCURRIDO UN ERROR EN LA CONSULTA')
             else:
-                IOFunctions.reportHTMLWMMSC(MMSC(auxiliar_instruction, general), nombre)
-
+                try:
+                    IOFunctions.reportHTMLWMMSC(MMSC(auxiliar_instruction, general), nombre)
+                except:
+                    print('HA OCURRIDO UN ERROR EN LA OPERACION')
     elif instruction[0].upper() == "MIN":
         
-        for i in MMSC(instruction, general):
-            print(i)
+        try:
+            for i in MMSC(instruction, general):
+                print(i)
+        except:
+            print('OCURRIO UN ERROR EN LA OPERACION')
 
     elif instruction[0].upper() == "MAX":
-        
-        for i in MMSC(instruction, general):
-            print(i)
-
+        try:
+            for i in MMSC(instruction, general):
+                print(i)
+        except:
+            print('OCURRIO UN ERROR EN LA OPERACION')
     elif instruction[0].upper() == "SUM":
-        
-        for i in MMSC(instruction, general):
-            print(i)
-
+        try:
+            for i in MMSC(instruction, general):
+                print(i)
+        except:
+            print('OCURRIO UN ERROR EN LA OPERACION')
     elif instruction[0].upper() == "COUNT":
-        
-        for i in MMSC(instruction, general):
-            print(i)
-
+        try:
+            for i in MMSC(instruction, general):
+                print(i)
+        except:
+            print('OCURRIO UN ERROR EN LA OPERACION')
     else:
         print("Instruccion no valida")
+
+#========================================================================#
+#SE ENCARGA DE SEPARAR LAS PALABRAS CUANDO LA INSTRUCCION ES UNA CONSULTA#
+#========================================================================#
 
 def Select(instruction, general):
     boolean1 = False
     boolean2 = False
+    regex = False
     verAtributos = []
     atributos = None #nombre de "columna"
     comparador = None # <, >...
@@ -144,6 +179,14 @@ def Select(instruction, general):
             contenido = []
             boolean1 = True
             continue
+
+        if str(i).upper() =='REGEX':
+            regex = True
+            continue
+
+        if regex:
+            contenido.append(i)
+            break
 
         if re.match('!|<|>|=', str(i)) != None:
             boolean2 = True
@@ -167,8 +210,15 @@ def Select(instruction, general):
                 else:
                     contenido.append(i)
                     boolean2 = False
-        
-    return IOFunctions.Select(verAtributos, atributos, comparador, contenido, operador, general)
+
+    if regex:
+        return IOFunctions.SelectWREGEX(verAtributos, atributos, contenido, general)
+    else:        
+        return IOFunctions.Select(verAtributos, atributos, comparador, contenido, operador, general)
+
+#=============================================#
+#LEE LA INSTRUCCION PARA MAX, MIN, SUM Y COUNT# 
+#=============================================#
 
 def MMSC(instruction, general):
     attributes = []

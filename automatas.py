@@ -36,13 +36,11 @@ def readAON(path):
         if estado==0:
             if texto[indice] == '(':
                 estado=1
-                #print('tk_parI = (')
             else:
                 break
         elif estado==1:
             if texto[indice] == '<':
                 estado = 2
-                #print('tk_menor = <')
             else:
                 break
         elif estado==2:
@@ -52,7 +50,6 @@ def readAON(path):
             tk_string = ''
             if texto[indice]=='[':
                 estado = 3
-                #print('tk_corchI = [')
             else:
                 break
         elif estado==3:
@@ -66,8 +63,6 @@ def readAON(path):
         elif estado==4:
             if texto[indice] == ']':
                 estado = 5
-                #print("tk_atributo = " + tk_atributo)
-                #print('tk_corchF = ]')
                 
             elif re.match('(.)*', texto[indice])!=None:
                 tk_atributo = tk_atributo + texto[indice]
@@ -77,24 +72,20 @@ def readAON(path):
         elif estado==5:
             if texto[indice] == '=':
                 estado = 6
-                #print('tk_equal = =')
             else:
                 break
         elif estado==6:
             if texto[indice] == '+':
                 estado = 7
-                #print('tk_sign = +')
                 tk_num = tk_num + texto[indice]
             elif texto[indice] == '-':
                 estado = 8
                 tk_num = tk_num + texto[indice]
-                #print('tk_sign = -')
             elif re.match('[0-9]', texto[indice]):
                 estado = 9
                 tk_num = tk_num + texto[indice]
             elif texto[indice] == '"':
                 estado = 10
-                #print('tk_comillas = "')
                 switchEspacios = True
             elif re.match('[a-z]|[A-Z]', texto[indice])!= None:
                 estado = 13
@@ -121,8 +112,6 @@ def readAON(path):
                 estado = 9
                 tk_num = tk_num + texto[indice]
             elif texto[indice] == ',':
-                #print('tk_num = '+tk_num)
-                #print('tk_coma = ,')
                 listado[tk_atributo] = float(tk_num)
                 listado.update(listado)
                 estado = 2
@@ -130,14 +119,10 @@ def readAON(path):
                 estado = 14
                 listado[tk_atributo] = float(tk_num)
                 listado.update(listado)
-                #print('tk_num = '+tk_num)
-                #print('tk_mayor = >')
             else:
                 break
         elif estado==10:
             if texto[indice] == '"':
-                #print('tk_string = '+tk_string)
-                #print('tk_comillas = "')
                 switchEspacios = False
                 estado = 12
             else:
@@ -145,8 +130,6 @@ def readAON(path):
                 tk_string = tk_string + texto[indice]
         elif estado==11:
             if texto[indice] == '"':
-                #print('tk_string = "'+tk_string+'"')
-                #print('tk_comillas = "')
                 switchEspacios = False
                 estado = 12
             else:
@@ -157,12 +140,10 @@ def readAON(path):
                 estado = 2
                 listado[tk_atributo] = tk_string
                 listado.update(listado)
-                #print('tk_coma = ,')
             elif texto[indice] == '>':
                 estado = 14
                 listado[tk_atributo] = tk_string
                 listado.update(listado)
-                #print('tk_mayor = >')
             else:
                 break
         elif estado==13:
@@ -171,25 +152,18 @@ def readAON(path):
                 tk_bool = tk_bool + texto[indice]
             elif texto[indice] == ',':
                 estado = 2
-                #listado[tk_atributo] = bool(tk_bool)
                 listado.update(listado)
                 if(re.match('(F|f)(A|a)(L|l)(S|s)(E|e)',tk_bool)):
                     listado[tk_atributo] = False
                 else:
                     listado[tk_atributo] = True
-                #print('================='+listado)
-                #print('tk_bool = '+tk_bool)
-                #print('tk_coma = ,')
             elif texto[indice] == '>':
                 estado = 14
-                #listado[tk_atributo] = bool(tk_bool)
                 if(re.match('(F|f)(A|a)(L|l)(S|s)(E|e)',tk_bool)):
                     listado[tk_atributo] = False
                 else:
                     listado[tk_atributo] = True
                 listado.update(listado)
-                #print('tk_bool = '+tk_bool)
-                #print('tk_mayor = >')
             else:
                 break
         elif estado==14:
@@ -198,10 +172,8 @@ def readAON(path):
             listado = {}
             if texto[indice] == ')':
                 estado = 15
-                #print('tk_parF = )')
             elif texto[indice] == ',':
                 estado = 1
-                #print('tk_coma = ,')
             else:
                 break
         elif estado==15:
@@ -227,14 +199,17 @@ def readInstruction(instruction, tokens):
             if instruction[i] == '*':
                 tokens.append({'tk_asterisco' : '*'})
                 instructionBlocs.append('*')
-            if re.match('[a-z]|[A-Z]|_', instruction[i]) != None:
+            elif re.match('[a-z]|[A-Z]|_', instruction[i]) != None:
                 text = text + instruction[i]
                 estado =1
             elif re.match('=|<|>|!', instruction[i]) != None:
                 estado = 2
                 text = text +instruction[i]
+            elif instruction[i] == "[":
+                tokens.append({'tk_corcheteApertura' : '['})
+                estado = 9
         elif estado == 1:
-            if re.match('[a-z]|[A-Z]|_|[0-9]|\.|\*', instruction[i]) != None:
+            if re.match('[a-z]|[A-Z]|_|[0-9]|\.', instruction[i]) != None:
                 text = text + instruction[i]
                 if i == len(instruction)-1:
                     if verificacionReservada(text):
@@ -330,10 +305,22 @@ def readInstruction(instruction, tokens):
                     tokens.append({'tk_boolean' : False})
                     instructionBlocs.append(False)
                 text = ''
+        elif estado == 9:
+            if instruction[i] ==']':
+                estado = 0
+                tokens.append({'tk_regex' : text})
+                instructionBlocs.append(text)
+                text = ''
+                tokens.append({'tk_corcheteCierre':']'})
+            else:
+                text = text + instruction[i]
         i += 1
-        
+    
     return(instructionBlocs)
 
+#========================================================#
+#SE ENCARGA DE VERIFICAR SI ES UNA PALABRA RESERVADA O NO#
+#========================================================#
 def verificacionReservada(text):
     for i in palabras:
         if i == str(text).upper():

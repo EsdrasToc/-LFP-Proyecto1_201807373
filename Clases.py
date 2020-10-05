@@ -1,6 +1,8 @@
 import IOFunctions
 import automatas
-
+#===========================================================================#
+#LA CLASE GROUP SE ENCARGA DE ALMACENAR LOS SET, ES DECIR UN GROUP ES UN SET#
+#===========================================================================#
 class Group:
     nombre = ''
     def __init__(self, nombre):
@@ -11,9 +13,15 @@ class Group:
         self.nombre = nombre
     
     def addInformation(self, path):
-        for i in automatas.readAON(path):
-            self.data.append(i)
+        try:
+            for i in automatas.readAON(path):
+                self.data.append(i)
+        except:
+            print('OCURRIO UN ERROR AL LEER EL ARCHIVO --- '+path+' ---')
 
+#==========================================================================================#
+#EN LA CLASE GENERAL SE GUARDAN LOS LISTADOS Y EL SET QUE SE UTILIZARAN PARA CADA OPERACION#
+#==========================================================================================#
 class General:
     def __init__(self):
         self.currentGroup = None

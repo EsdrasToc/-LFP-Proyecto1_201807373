@@ -9,5 +9,7 @@ instruction = []
 while general.cicle:
 
     initialInstruction = input('$')
-
-    RI.decision(automatas.readInstruction(initialInstruction, general.tokens), general)
+    try:
+        RI.decision(automatas.readInstruction(initialInstruction, general.tokens), general)
+    except:
+        print('HA OCURRIDO UN ERROR CON LA INSTRUCCION')
