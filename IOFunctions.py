@@ -62,7 +62,6 @@ def Select(verAtributos, atributo, comparador, contenido, operador, general):
         else:
             return general.currentGroup.data
     else:
-        #if re.match('(O|o)(R|r)', operador) != None:
         if str(operador).upper() == 'OR':
             for i in general.currentGroup.data:
                 try:
@@ -70,7 +69,6 @@ def Select(verAtributos, atributo, comparador, contenido, operador, general):
                         data.append(i)
                 except:
                     continue
-        #elif re.match('(A|a)(N|n)(D|d)', operador) != None:
         elif str(operador).upper() == 'AND':
             for i in general.currentGroup.data:
                 try:
@@ -78,7 +76,6 @@ def Select(verAtributos, atributo, comparador, contenido, operador, general):
                         data.append(i)
                 except:
                     continue
-        #elif re.match('(X|x)(O|o)(R|r)', operador) != None:
         elif str(operador).upper() == 'XOR':
             for i in general.currentGroup.data:
                 try:
